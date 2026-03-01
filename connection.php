@@ -4,7 +4,7 @@ $host = "127.0.0.1";
 $user = "root";
 $pass = ""; // Di solito vuota su XAMPP
 $db   = "tictactoe_neon";
-$port = 3307; // La porta che avevi provato e che probabilmente serve
+$port = 3307; 
 
 // Unico comando di connessione chiaro
 $conn = new mysqli($host, $user, $pass, $db, $port);
