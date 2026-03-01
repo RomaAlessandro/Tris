@@ -1,0 +1,147 @@
+/* 1. SFONDO GLOBALE (Immagine su tutta la pagina) */
+body {
+  margin: 0;
+  height: 100vh;
+  background-image: url('img_neon.png'); 
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff;
+  overflow: hidden;
+  position: relative;
+}
+
+/* 2. OVERLAY SCURO (Scurisce l'immagine per far risaltare il neon) */
+body::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6); 
+  z-index: 0;
+}
+
+/* 3. CONTENITORE PRINCIPALE (Sopra l'overlay) */
+.container {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  width: 100%;
+  max-width: 450px;
+  padding: 20px;
+}
+
+/* 4. SCHERMATE (Login, Start e Gioco) */
+#loginScreen, #startScreen, #actualGame {
+  background: rgba(0, 0, 0, 0.7); /* Sfondo semitrasparente nero */
+  padding: 30px;
+  border-radius: 20px;
+  border: 2px solid #0ff;
+  box-shadow: 0 0 20px #0ff8, inset 0 0 10px #0ff4;
+  margin-bottom: 20px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* 5. GRIGLIA DI GIOCO */
+.board {
+  width: 330px;
+  height: 330px;
+  margin: 20px auto;
+  display: grid;
+  grid-template-columns: repeat(3, 110px);
+  grid-template-rows: repeat(3, 110px);
+  gap: 5px;
+  background: #0ff2;
+  border: 2px solid #0ff;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* 6. CELLE */
+.cell {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+  font-weight: bold;
+  color: #0ff;
+  text-shadow: 0 0 10px #0ff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cell:hover {
+  background: rgba(0, 255, 255, 0.1);
+}
+
+/* Animazione per la vittoria */
+.cell.win {
+  background: #0ff;
+  color: #000;
+  box-shadow: 0 0 20px #0ff;
+}
+
+/* 7. INPUT E BOTTONI NEON */
+input, select {
+  width: 80%;
+  padding: 10px;
+  margin: 10px 0;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid #0ff;
+  color: #fff;
+  border-radius: 5px;
+  outline: none;
+}
+
+button {
+  background: transparent;
+  color: #0ff;
+  border: 2px solid #0ff;
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: 0.3s;
+  box-shadow: 0 0 10px #0ff4;
+  margin: 10px 5px;
+}
+
+button:hover {
+  background: #0ff;
+  color: #000;
+  box-shadow: 0 0 20px #0ff;
+}
+
+/* 8. TESTI */
+h1, h2 {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px #0ff;
+}
+
+#status {
+  margin: 15px 0;
+  font-size: 1.2rem;
+}
+
+#score {
+  margin-top: 15px;
+  font-weight: bold;
+  color: #0ff;
+}
+
+a {
+  color: #0ff;
+  text-decoration: none;
+}
