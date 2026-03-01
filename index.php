@@ -1,10 +1,6 @@
 <?php 
 include "connection.php"; 
 ?>
-<!-- Non ho molto da dire anche perche' non e' il mio campo il frontend
- ma la cintura vola perche' non hai chiamato questo file index.php
- il file da cui parte il sito il primo che viene caricato si deve chiamare
- sempre index  -->
 <!doctype html>
 <html lang="it">
 <head>
