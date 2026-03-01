@@ -7,3 +7,7 @@ Il nome dell'immagine di sfondo (img_neon.png).
 Ricordarsi di aggiungere i Reset css
 
 Cntrollare l imput se non sei registrato
+
+Semplificare se necessario
+
+Coomentare codice se necessario
