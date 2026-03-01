@@ -11,3 +11,5 @@ Cntrollare l imput se non sei registrato
 Semplificare se necessario
 
 Coomentare codice se necessario
+
+Inserire messaggio di errore se mettiamo password sbagliata
