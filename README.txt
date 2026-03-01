@@ -1,4 +1,4 @@
-La porta MySQL usata (3307).
+La porta MySQL usata (3307). se non la trova prova la porta (3307) credo
 
 Le credenziali del database (root / password vuota).
 
