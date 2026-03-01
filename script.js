@@ -114,7 +114,7 @@ function updateScore() {
   scoreEl.innerHTML = `${p1Name} (X): ${scoreX} | ${p2Name} (O): ${scoreO}`;
 }
 
-// FIX: Rimosso il riferimento a "err" che bloccava tutto
+
 document.getElementById("startBtn").onclick = () => {
   mode = document.getElementById("mode").value;
   p1Name = document.getElementById("p1").value;
