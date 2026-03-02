@@ -1,16 +1,18 @@
-La porta MySQL usata (3307). se non la trova prova la porta (3307) credo
+La porta MySQL usata a scuola(3306). a casa  (3306) 
 
-Le credenziali del database (root / password vuota).
+Host (localhost/"127.0.0.1")
+
+Le credenziali del database (root / password vuota). A scuola (root / root)
 
 Il nome dell'immagine di sfondo (img_neon.png).
 
 Ricordarsi di aggiungere i Reset css
 
-Cntrollare l imput se non sei registrato
+Cotrollare l input se non sei registrato
 
 Semplificare se necessario
 
-Coomentare codice se necessario
+Commentare codice se necessario
 
 Inserire messaggio di errore se mettiamo password sbagliata
 
