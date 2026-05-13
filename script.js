@@ -22,11 +22,11 @@ const vsEl = document.getElementById("vs");
 function drawBoard() {
   boardEl.innerHTML = "";
   board.forEach((val, i) => {
-    let c = document.createElement("div");
-    c.className = "cell";
-    c.innerHTML = val;
-    c.onclick = () => play(i);
-    boardEl.appendChild(c);
+	let c = document.createElement("div");
+	c.className = "cell";
+	c.innerHTML = val;
+	c.onclick = () => play(i);
+	boardEl.appendChild(c);
   });
 }
 
@@ -37,14 +37,14 @@ function play(i) {
 
   let winCombo = checkWin();
   if (winCombo) {
-    winRound(winCombo);
+	winRound(winCombo);
   } else if (board.every(cell => cell !== "")) {
-    tieRound();
+	tieRound();
   } else {
-    switchTurn();
-    if (mode === "cpu" && turn === "O") {
-        setTimeout(cpuMove, 600);
-    }
+	switchTurn();
+	if (mode === "cpu" && turn === "O") {
+		setTimeout(cpuMove, 600);
+	}
   }
 }
 
@@ -52,29 +52,29 @@ function cpuMove() {
   if (over) return;
   // 1. Vincere
   for (let combo of combos) {
-    let a = board[combo[0]], b = board[combo[1]], c = board[combo[2]];
-    if (a === "O" && b === "O" && c === "") { play(combo[2]); return; }
-    if (a === "O" && c === "O" && b === "") { play(combo[1]); return; }
-    if (b === "O" && c === "O" && a === "") { play(combo[0]); return; }
+	let a = board[combo[0]], b = board[combo[1]], c = board[combo[2]];
+	if (a === "O" && b === "O" && c === "") { play(combo[2]); return; }
+	if (a === "O" && c === "O" && b === "") { play(combo[1]); return; }
+	if (b === "O" && c === "O" && a === "") { play(combo[0]); return; }
   }
   // 2. Bloccare
   for (let combo of combos) {
-    let a = board[combo[0]], b = board[combo[1]], c = board[combo[2]];
-    if (a === "X" && b === "X" && c === "") { play(combo[2]); return; }
-    if (a === "X" && c === "X" && b === "") { play(combo[1]); return; }
-    if (b === "X" && c === "X" && a === "") { play(combo[0]); return; }
+	let a = board[combo[0]], b = board[combo[1]], c = board[combo[2]];
+	if (a === "X" && b === "X" && c === "") { play(combo[2]); return; }
+	if (a === "X" && c === "X" && b === "") { play(combo[1]); return; }
+	if (b === "X" && c === "X" && a === "") { play(combo[0]); return; }
   }
   // 3. Casuale
   let emptyCells = board.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
   if (emptyCells.length > 0) {
-    let randomIdx = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-    play(randomIdx);
+	let randomIdx = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+	play(randomIdx);
   }
 }
 
 function checkWin() {
   for (let combo of combos) {
-    if (board[combo[0]] && board[combo[0]] === board[combo[1]] && board[combo[0]] === board[combo[2]]) return combo;
+	if (board[combo[0]] && board[combo[0]] === board[combo[1]] && board[combo[0]] === board[combo[2]]) return combo;
   }
   return null;
 }
@@ -83,11 +83,15 @@ function winRound(combo) {
   combo.forEach(idx => boardEl.children[idx].classList.add("win"));
   over = true;
   statusEl.textContent = turn + " ha vinto!";
+
   if (turn === "X") {
-      scoreX++;
-      fetch('update_score.php', { method: 'POST' });
+	scoreX++;
+	// L'utente loggato (X) ha vinto
+	sendGameResult('vittoria');
   } else {
-      scoreO++;
+	scoreO++;
+	// L'utente loggato ha perso (ha vinto O)
+	sendGameResult('sconfitta');
   }
   updateScore();
 }
@@ -95,6 +99,8 @@ function winRound(combo) {
 function tieRound() {
   over = true;
   statusEl.textContent = "Pareggio!";
+  // L'utente loggato ha pareggiato
+  sendGameResult('pareggio');
 }
 
 function switchTurn() {
@@ -114,6 +120,25 @@ function updateScore() {
   scoreEl.innerHTML = `${p1Name} (X): ${scoreX} | ${p2Name} (O): ${scoreO}`;
 }
 
+function sendGameResult(resultType) {
+  const formData = new FormData();
+  formData.append('result', resultType);
+
+  // Chiamata asincrona al server
+  fetch('update_score.php', {
+	method: 'POST',
+	body: formData
+  })
+	.then(response => response.json())
+	.then(data => {
+	  // Aggiorna dinamicamente i valori delle statistiche nel DOM senza reload
+	  if (data.vittorie !== undefined) document.getElementById('stat-vittorie').textContent = data.vittorie;
+	  if (data.sconfitte !== undefined) document.getElementById('stat-sconfitte').textContent = data.sconfitte;
+	  if (data.pareggi !== undefined) document.getElementById('stat-pareggi').textContent = data.pareggi;
+	})
+	.catch(err => console.error("Errore durante l'invio asincrono:", err));
+}
+
 
 document.getElementById("startBtn").onclick = () => {
   mode = document.getElementById("mode").value;
@@ -127,6 +152,8 @@ document.getElementById("startBtn").onclick = () => {
   updateScore();
   drawBoard();
 };
+
+
 
 document.getElementById("restartRound").onclick = resetRound;
 document.getElementById("resetAll").onclick = () => location.reload();

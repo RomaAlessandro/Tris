@@ -7,17 +7,32 @@
 </head>
 <body>
     <div class="container">
-        <div id="loginScreen"> <h1>Registrazione</h1>
-            <form action="register_process.php" method="POST">
+        <div id="loginScreen"> 
+            <h1>Registrazione</h1>
+            <form id="registerForm">
                 <input type="text" name="user" placeholder="Scegli Username" required>
                 <input type="password" name="pass" placeholder="Scegli Password" required>
                 <button type="submit">Crea Account</button>
             </form>
+            <p id="msg" style="margin-top:15px; font-weight:bold;"></p>
             <p>Hai già un account? <a href="index.php">Accedi qui</a></p>
-            <?php if(isset($_GET['error'])): ?>
-                <p style="color: #ff4444;">Username già esistente!</p>
-            <?php endif; ?>
         </div>
     </div>
+
+    <script>
+    document.getElementById('registerForm').onsubmit = function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const msg = document.getElementById('msg');
+
+        fetch('register_process.php', { method: 'POST', body: formData })
+        .then(r => r.json())
+        .then(data => {
+            msg.textContent = data.message;
+            msg.style.color = data.success ? "#0ff" : "#ff4444";
+            if(data.success) setTimeout(() => window.location.href = "index.php", 2000);
+        });
+    };
+    </script>
 </body>
 </html>

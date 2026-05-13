@@ -1,26 +1,23 @@
 <?php
 require_once 'connection.php';
+header('Content-Type: application/json');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user = $conn->real_escape_string($_POST['user']);
-    $pass = $_POST['pass']; // Per ora in chiaro come il login, ma andrebbe criptata
+    $pass = $_POST['pass']; 
 
-    // Controlliamo se l'utente esiste già
     $check = $conn->query("SELECT * FROM giocatori WHERE username = '$user'");
 
     if ($check->num_rows > 0) {
-        // Utente già presente, torna alla registrazione con errore
-        header("Location: register.php?error=1");
+        echo json_encode(["success" => false, "message" => "Username già esistente!"]);
     } else {
-        // Inseriamo il nuovo giocatore
-        $sql = "INSERT INTO giocatori (username, password, vittorie) VALUES ('$user', '$pass', 0)";
-        
+        $sql = "INSERT INTO giocatori (username, password, vittorie, sconfitte, pareggi) VALUES ('$user', '$pass', 0, 0, 0)";
         if ($conn->query($sql)) {
-            // Registrazione riuscita! Mandalo al login
-            header("Location: index.php?registered=1");
+            echo json_encode(["success" => true, "message" => "Registrazione riuscita! Verrai reindirizzato al login..."]);
         } else {
-            echo "Errore durante la registrazione: " . $conn->error;
+            echo json_encode(["success" => false, "message" => "Errore: " . $conn->error]);
         }
     }
+    exit;
 }
 ?>
