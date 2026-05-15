@@ -145,3 +145,18 @@ a {
 	color: #0ff;
 	text-decoration: none;
 }
+
+#psw-feedback div {
+	transition: all 0.3s ease;
+	margin-bottom: 2px;
+}
+
+.invalid {
+	color: #ff4444;
+	text-shadow: 0 0 5px #ff4444;
+}
+
+/* Quando diventa valido, usiamo il ciano neon del tuo tema */
+#psw-feedback div[style*="color: rgb(0, 255, 255)"] {
+	text-shadow: 0 0 8px #0ff;
+}
