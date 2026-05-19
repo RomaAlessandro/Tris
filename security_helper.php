@@ -44,4 +44,14 @@ function clearAttempts($conn, $ip) {
     $stmt->bind_param("s", $ip);
     $stmt->execute();
 }
+
+/**
+ * Registra un evento di accesso nella tabella dei log
+ */
+function logAccess($conn, $username, $ip, $esito, $dettaglio = null) {
+    $sql = "INSERT INTO access_logs (username, ip_address, esito, dettaglio) VALUES (?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("ssss", $username, $ip, $esito, $dettaglio);
+    $stmt->execute();
+}
 ?>
