@@ -9,28 +9,71 @@
     <div class="container">
         <?php if (!isset($_SESSION['username'])): ?>
             <div id="loginScreen">
-                <h1>Accedi</h1>
-                <form id="loginForm">
-                    <input type="text" name="user" placeholder="Username" required>
-                    <input type="password" name="pass" placeholder="Password" required>
-                    <button type="submit">Entra</button>
-                </form>
-                <p id="loginMsg" style="color: #ff4444; margin-top:10px;"></p>
-                <p>Non hai un account? <a href="register.php">Registrati</a></p>
-            </div>
+    <h1>Accedi</h1>
+    
+    <form id="loginForm">
+        <input type="text" name="user" id="loginUser" placeholder="Username" required>
+        <input type="password" name="pass" id="loginPass" placeholder="Password" required>
+        <button type="submit">Entra</button>
+    </form>
+
+    <form id="2faForm" style="display:none; margin-top: 15px;">
+        <h3 style="color: #0ff;">Autenticazione 2FA</h3>
+        <p style="font-size:0.85em; color:#bbb;">Inserisci il codice di sicurezza a 6 cifre.</p>
+        <input type="text" name="otp_code" placeholder="Codice OTP (6 cifre)" maxlength="6" required style="text-align:center; font-size: 1.2rem; letter-spacing: 5px;">
+        <input type="hidden" name="pending_user" id="pendingUser">
+        <button type="submit" style="border-color: #ff0055; color: #ff0055; text-shadow: 0 0 5px #ff0055;">Verifica Codice</button>
+    </form>
+
+    <p id="loginMsg" style="color: #ff4444; margin-top:10px; font-weight:bold;"></p>
+    <p id="registerLink">Non hai un account? <a href="register.php">Registrati</a></p>
+</div>
+
+<script>
+// Gestione del Primo Form (Login Standard)
+document.getElementById('loginForm').onsubmit = function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const msg = document.getElementById('loginMsg');
+    
+    fetch('login_process.php', { method: 'POST', body: formData })
+    .then(r => r.json())
+    .then(data => {
+        if(data.success && data.step === "2fa_required") {
+            // Mostra il codice generato in un box per simulare la ricezione (visto che siamo su localhost)
+            alert("🔑 [SIMULAZIONE 2FA] Il tuo codice OTP è: " + data.debug_code);
             
-            <script>
-            document.getElementById('loginForm').onsubmit = function(e) {
-                e.preventDefault();
-                const formData = new FormData(this);
-                fetch('login_process.php', { method: 'POST', body: formData })
-                .then(r => r.json())
-                .then(data => {
-                    if(data.success) location.reload();
-                    else document.getElementById('loginMsg').textContent = data.message;
-                });
-            };
-            </script>
+            // Nascondi login e mostra inserimento OTP
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerLink').style.display = 'none';
+            document.getElementById('2faForm').style.display = 'block';
+            document.getElementById('pendingUser').value = data.username;
+            msg.textContent = ""; 
+        } else {
+            msg.textContent = data.message;
+            msg.style.color = "#ff4444";
+        }
+    });
+};
+
+// Gestione del Secondo Form (Verifica OTP)
+document.getElementById('2faForm').onsubmit = function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+    const msg = document.getElementById('loginMsg');
+
+    fetch('login_process.php', { method: 'POST', body: formData })
+    .then(r => r.json())
+    .then(data => {
+        if(data.success) {
+            location.reload(); // Entra nel gioco!
+        } else {
+            msg.textContent = data.message;
+            msg.style.color = "#ff4444";
+        }
+    });
+};
+</script>
             
         <?php else: ?>
             <div id="gameScreen">
